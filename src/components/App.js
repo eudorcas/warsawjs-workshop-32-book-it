@@ -34,7 +34,6 @@ const Pack = ({ children, text }) => (
 );
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState, init);
-  console.log(state);
   const selectHotelDispatch = hotel =>
     dispatch({ type: 'hotel', payload: { hotel } });
   const selectPaymentMethodDispatch = method =>
@@ -72,7 +71,7 @@ const App = () => {
           />
         </Pack>
       )}
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

@@ -1,6 +1,20 @@
 import React from 'react';
 import { Icon, Menu } from 'semantic-ui-react';
-import { sortFields } from './HotelsList';
+
+const sortFields = [
+  {
+    text: 'ilość opinii',
+    value: 'reviews',
+  },
+  {
+    text: 'ocena gości',
+    value: 'rating',
+  },
+  {
+    text: 'cena',
+    value: 'price',
+  },
+];
 
 export class SortBar extends React.PureComponent {
   render() {

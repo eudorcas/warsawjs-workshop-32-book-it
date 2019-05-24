@@ -1,25 +1,10 @@
-import React, { useState, useCallback } from 'react';
-import { Item, Grid } from 'semantic-ui-react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import axios from 'axios';
+import { Item, Grid, Loader } from 'semantic-ui-react';
 
-import data from '../data.json';
 import { Filters } from './Filters';
 import { SortBar } from './SortBar';
 import { HotelCard } from './HotelCard';
-
-export const sortFields = [
-  {
-    text: 'ilość opinii',
-    value: 'reviews',
-  },
-  {
-    text: 'ocena gości',
-    value: 'rating',
-  },
-  {
-    text: 'cena',
-    value: 'price',
-  },
-];
 
 const sortHotels = {
   price: (a, b) => a.price.amount - b.price.amount,
@@ -59,6 +44,18 @@ const applyFilter = (filters, data) => {
 const HotelsList = ({ selectHotel }) => {
   const [sortField, setField] = useState('price');
   const [bedsTypeFilter, setBedType] = useState({});
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      const result = await axios(process.env.PUBLIC_URL + '/data.json');
+      setIsLoading(false);
+      setData(result.data.list);
+    };
+    fetchData();
+  }, []);
 
   const setBedTypeFilter = useCallback(
     (value, checked) =>
@@ -68,7 +65,8 @@ const HotelsList = ({ selectHotel }) => {
       }),
     [bedsTypeFilter]
   );
-  const sortedHotels = data.list.sort(sortHotels[sortField]);
+  const hotelsInFilter = useMemo(() => countHotelsByBedType(data), [data]);
+  const sortedHotels = data.sort(sortHotels[sortField]);
   const filteredHotels = applyFilter(bedsTypeFilter, sortedHotels);
 
   return (
@@ -76,9 +74,9 @@ const HotelsList = ({ selectHotel }) => {
       <SortBar sortField={sortField} setField={setField} />
       <Layout>
         <Layout.Sidebar>
-          <Filters onChange={setBedTypeFilter} />
+          <Filters count={hotelsInFilter} onChange={setBedTypeFilter} />
         </Layout.Sidebar>
-        <Layout.Feed>
+        <Layout.Feed isLoading={isLoading}>
           {filteredHotels.map(hotel => (
             <HotelCard key={hotel.id} hotel={hotel} selectHotel={selectHotel} />
           ))}
@@ -97,9 +95,11 @@ const Sidebar = ({ children }) => (
   <Grid.Column width={4}>{children}</Grid.Column>
 );
 
-const Feed = ({ children }) => (
+const Feed = ({ isLoading, children }) => (
   <Grid.Column width={12}>
-    <Item.Group divided>{children}</Item.Group>
+    <Item.Group divided>
+      {isLoading ? <Loader active inline="centered" /> : children}
+    </Item.Group>
   </Grid.Column>
 );
 
