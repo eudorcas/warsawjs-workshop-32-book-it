@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Table, Divider } from 'semantic-ui-react';
-import { HotelCard } from './HotelCard';
+import { HotelCard } from './HotelSummary';
 
 export class ReservationSummary extends React.Component {
   render() {

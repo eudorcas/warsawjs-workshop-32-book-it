@@ -1,183 +1,109 @@
-import React from 'react';
-import {
-  Button,
-  Item,
-  Divider,
-  Grid,
-  Header,
-  Icon,
-  Checkbox,
-  Label,
-  Menu,
-  Rating,
-} from 'semantic-ui-react';
+import React, { useState, useCallback } from 'react';
+import { Item, Grid } from 'semantic-ui-react';
 
 import data from '../data.json';
-const item = data.list[0];
+import { Filters } from './Filters';
+import { SortBar } from './SortBar';
+import { HotelCard } from './HotelCard';
 
-const HotelsList = ({ selectHotel }) => (
-  <>
-    <Menu secondary>
-      <Menu.Menu position="right">
-        <Menu.Item>Sortuj według:</Menu.Item>
-        <Menu.Item as="a">Cena</Menu.Item>
-        <Menu.Item as="a">Ocena gości</Menu.Item>
-        <Menu.Item as="a">
-          Odległość od centrum <Icon name="caret down" />
-        </Menu.Item>
-      </Menu.Menu>
-    </Menu>
-    <Grid stackable divided>
-      <Grid.Row>
-        <Grid.Column width={4}>
-          <Header as="h4">Filtruj według następujących kryteriów:</Header>
-          <Divider fitted />
-          <Header as="h5">Śniadanie wliczone w cenę</Header>
-          <Checkbox label="tak" />
-          <br />
-          <Checkbox label="nie" />
-          <Header as="h5">Rodzaj łóżka</Header>
-          <Checkbox label="Double" />
-          <br />
-          <Checkbox label="Single" />
-          <br />
-          <Checkbox label="Twin" />
-          <br />
-        </Grid.Column>
-        <Grid.Column width={12}>
-          <Item.Group divided>
-            <Item>
-              <Item.Image
-                label={{ as: 'a', corner: 'left', icon: 'heart' }}
-                src={item.cover.url}
-              />
+export const sortFields = [
+  {
+    text: 'ilość opinii',
+    value: 'reviews',
+  },
+  {
+    text: 'ocena gości',
+    value: 'rating',
+  },
+  {
+    text: 'cena',
+    value: 'price',
+  },
+];
 
-              <Item.Content>
-                <Item.Header as="a">{item.title}</Item.Header>
-                <Item.Meta>
-                  {item.location.address} (do centrum {item.location.centre})
-                </Item.Meta>
-                <Item.Description style={{ minHeight: '76px' }}>
-                  <div style={{ float: 'right' }}>
-                    <Label tag size={'huge'}>
-                      {item.price.amount} {item.price.currency}
-                    </Label>
-                  </div>
-                  Ocena gości:{' '}
-                  <Rating
-                    disabled
-                    maxRating={10}
-                    defaultRating={Math.round(item.rating.average)}
-                    icon="star"
-                    size="small"
-                  />
-                  <div>
-                    Śniadanie wliczone w cenę:{' '}
-                    <strong>{item.price.breakfast ? 'TAK' : 'NIE'}</strong>
-                  </div>
-                  <div>
-                    Rodzaj łóżka: <strong>{item.room}</strong>
-                  </div>
-                </Item.Description>
-                <Item.Extra>
-                  <Button
-                    onClick={() => selectHotel(item)}
-                    primary
-                    floated="right"
-                  >
-                    Wybierz
-                  </Button>
-                  <Label icon="globe" content={item.demand} />
-                </Item.Extra>
-              </Item.Content>
-            </Item>
-            <Item>
-              <Item.Image
-                label={{ as: 'a', corner: 'left', icon: 'heart' }}
-                src={item.cover.url}
-              />
+const sortHotels = {
+  price: (a, b) => a.price.amount - b.price.amount,
+  rating: (a, b) => b.rating.average - a.rating.average,
+  reviews: (a, b) => b.rating.reviews - a.rating.reviews,
+};
 
-              <Item.Content>
-                <Item.Header as="a">{item.title}</Item.Header>
-                <Item.Meta>
-                  {item.location.address} (do centrum {item.location.centre})
-                </Item.Meta>
-                <Item.Description style={{ minHeight: '76px' }}>
-                  <div style={{ float: 'right' }}>
-                    <Label tag size={'huge'}>
-                      {item.price.amount} {item.price.currency}
-                    </Label>
-                  </div>
-                  Ocena gości:{' '}
-                  <Rating
-                    disabled
-                    maxRating={10}
-                    defaultRating={Math.round(item.rating.average)}
-                    icon="star"
-                    size="small"
-                  />
-                  <div>
-                    Śniadanie wliczone w cenę:{' '}
-                    <strong>{item.price.breakfast ? 'TAK' : 'NIE'}</strong>
-                  </div>
-                  <div>
-                    Rodzaj łóżka: <strong>{item.room}</strong>
-                  </div>
-                </Item.Description>
-                <Item.Extra>
-                  <Button primary floated="right">
-                    Wybierz
-                  </Button>
-                  <Label icon="globe" content={item.demand} />
-                </Item.Extra>
-              </Item.Content>
-            </Item>
-            <Item>
-              <Item.Image
-                label={{ as: 'a', corner: 'left', icon: 'heart' }}
-                src={item.cover.url}
-              />
+export const bedsType = [
+  {
+    text: 'Single',
+    value: 'single',
+  },
+  {
+    text: 'Double',
+    value: 'double',
+  },
+  {
+    text: 'Twin',
+    value: 'twin',
+  },
+];
+const countHotelsByBedType = data =>
+  data.reduce(function(acc, v) {
+    acc[v.room] = acc[v.room] ? acc[v.room] + 1 : 1;
+    return acc;
+  }, {});
 
-              <Item.Content>
-                <Item.Header as="a">{item.title}</Item.Header>
-                <Item.Meta>
-                  {item.location.address} (do centrum {item.location.centre})
-                </Item.Meta>
-                <Item.Description style={{ minHeight: '76px' }}>
-                  <div style={{ float: 'right' }}>
-                    <Label tag size={'huge'}>
-                      {item.price.amount} {item.price.currency}
-                    </Label>
-                  </div>
-                  Ocena gości:{' '}
-                  <Rating
-                    disabled
-                    maxRating={10}
-                    defaultRating={Math.round(item.rating.average)}
-                    icon="star"
-                    size="small"
-                  />
-                  <div>
-                    Śniadanie wliczone w cenę:{' '}
-                    <strong>{item.price.breakfast ? 'TAK' : 'NIE'}</strong>
-                  </div>
-                  <div>
-                    Rodzaj łóżka: <strong>{item.room}</strong>
-                  </div>
-                </Item.Description>
-                <Item.Extra>
-                  <Button primary floated="right">
-                    Wybierz
-                  </Button>
-                  <Label icon="globe" content={item.demand} />
-                </Item.Extra>
-              </Item.Content>
-            </Item>
-          </Item.Group>
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
-  </>
+const applyFilter = (filters, data) => {
+  const isFilterSet = bedsType.find(b => filters[b.value]);
+  if (!isFilterSet) {
+    return data;
+  }
+  const filteredHotels = data.filter(h => filters[h.room.toLowerCase()]);
+  return filteredHotels;
+};
+
+const HotelsList = ({ selectHotel }) => {
+  const [sortField, setField] = useState('price');
+  const [bedsTypeFilter, setBedType] = useState({});
+
+  const setBedTypeFilter = useCallback(
+    (value, checked) =>
+      setBedType({
+        ...bedsTypeFilter,
+        [value]: checked,
+      }),
+    [bedsTypeFilter]
+  );
+  const sortedHotels = data.list.sort(sortHotels[sortField]);
+  const filteredHotels = applyFilter(bedsTypeFilter, sortedHotels);
+
+  return (
+    <>
+      <SortBar sortField={sortField} setField={setField} />
+      <Layout>
+        <Layout.Sidebar>
+          <Filters onChange={setBedTypeFilter} />
+        </Layout.Sidebar>
+        <Layout.Feed>
+          {filteredHotels.map(hotel => (
+            <HotelCard key={hotel.id} hotel={hotel} selectHotel={selectHotel} />
+          ))}
+        </Layout.Feed>
+      </Layout>
+    </>
+  );
+};
+
+const Layout = ({ children }) => (
+  <Grid stackable divided>
+    <Grid.Row>{children}</Grid.Row>
+  </Grid>
 );
+const Sidebar = ({ children }) => (
+  <Grid.Column width={4}>{children}</Grid.Column>
+);
+
+const Feed = ({ children }) => (
+  <Grid.Column width={12}>
+    <Item.Group divided>{children}</Item.Group>
+  </Grid.Column>
+);
+
+Layout.Sidebar = Sidebar;
+Layout.Feed = Feed;
 
 export default HotelsList;

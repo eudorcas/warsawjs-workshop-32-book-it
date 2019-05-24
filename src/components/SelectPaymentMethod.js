@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Divider, Header, Dropdown } from 'semantic-ui-react';
-import { HotelCard } from './HotelCard';
+import { HotelCard } from './HotelSummary';
 
 export const paymentsOptions = [
   {

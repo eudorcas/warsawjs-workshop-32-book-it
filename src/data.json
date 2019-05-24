@@ -1,6 +1,7 @@
 {
   "list": [
     {
+      "id": 1,
       "title": "Premiere Classe Varsovie/Warszawa",
       "cover": {
         "url": "https://q-ak.bstatic.com/xdata/images/hotel/square600/177093653.webp?k=f1ab0e1cf6be6c6240c678af20c1cfef04ebe447e870e8ba040942410d82312d&o=",
@@ -14,24 +15,82 @@
         "average": "7.6",
         "reviews": "1260"
       },
-      "insights": [
-        {
-          "text": "1 other person looked for your dates in the last 10 minutes",
-          "tag": null,
-          "highlights": false
-        },
-        {
-          "text": "1 other person looked for your dates in the last 10 minutes",
-          "tag": "Last booked for your dates 42 minutes ago",
-          "highlights": true
-        }
-      ],
       "demand": "HIGH",
       "room": "Double",
       "price": {
         "amount": "1669",
         "currency": "zł",
         "breakfast": true
+      }
+    },
+    {
+      "id": 2,
+      "title": "Sangate Hotel Airport",
+      "cover": {
+        "url": "https://t-ec.bstatic.com/xdata/images/hotel/square200/115384139.webp?k=6d1b9b02d505a33251d1124f7480b7156291cf0b11ae9fce87915cd685071e46&o=",
+        "tag": "Bestseller"
+      },
+      "location": {
+        "address": "17-go stycznia 32, Włochy, 02-148 Warsaw, Poland",
+        "centre": "5 km"
+      },
+      "rating": {
+        "average": "7.6",
+        "reviews": "6840"
+      },
+      "demand": "MEDIUM",
+      "room": "Twin",
+      "price": {
+        "amount": "1007",
+        "currency": "zł",
+        "breakfast": false
+      }
+    },
+    {
+      "id": 3,
+      "title": "B&B Hotel Warszawa-Okęcie",
+      "cover": {
+        "url": "https://s-ec.bstatic.com/xdata/images/hotel/square200/34694763.webp?k=83ce1d78f3fed650102b1d8a97723a0fb42f311c465d317f35258bf55e5fa61e&o=",
+        "tag": "Bestseller"
+      },
+      "location": {
+        "address": "Al. Krakowska 193, Włochy, 02-180 Warsaw, Poland",
+        "centre": "6 km"
+      },
+      "rating": {
+        "average": "8.1",
+        "reviews": "4236"
+      },
+      "demand": "LOW",
+      "room": "Single",
+      "price": {
+        "amount": "185",
+        "currency": "zł",
+        "breakfast": true
+      }
+    },
+
+    {
+      "id": 4,
+      "title": "PURO Warszawa Centrum",
+      "cover": {
+        "url": "https://s-ec.bstatic.com/xdata/images/hotel/square200/186005531.jpg?k=c186c0ebabf907bed6f664986a26fd06004402aa9fb32665685f893526559124&o=",
+        "tag": "Bestseller"
+      },
+      "location": {
+        "address": "Ul. Widok 5/7/9, Śródmieście, 00-023 Warsaw, Poland",
+        "centre": "0.5 km"
+      },
+      "rating": {
+        "average": "9.6",
+        "reviews": "23"
+      },
+      "demand": "LOW",
+      "room": "Double",
+      "price": {
+        "amount": "719",
+        "currency": "zł",
+        "breakfast": false
       }
     }
   ]
