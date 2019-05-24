@@ -1,9 +1,9 @@
 import React from 'react';
 import { Label } from 'semantic-ui-react';
 
-import useHover from '../utils/useHover';
-import Hover from '../utils/Hover';
-import withHover from '../utils/withHover';
+import useHover from '../../utils/useHover';
+import Hover from '../../utils/Hover';
+import withHover from '../../utils/withHover';
 
 const text = {
   LOW: 'niskie obłożenie',

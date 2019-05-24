@@ -9,12 +9,8 @@ import {
 } from 'semantic-ui-react';
 
 import { connect } from 'react-redux';
-import {
-  isModalOpen,
-  getAuthError,
-  isLoginInProgress,
-} from '../auth/auth.selector';
-import { loginUser, closeAuthModal } from '../auth/auth.reducer';
+import { isModalOpen, getAuthError, isLoginInProgress } from '../selectors';
+import { loginUser, closeAuthModal } from '../reducers';
 
 const LoginForm = ({ isOpen, close, login, error, loading }) => {
   const [nick, setNick] = useState('');

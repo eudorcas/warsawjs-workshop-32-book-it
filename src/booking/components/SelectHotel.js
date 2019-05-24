@@ -1,18 +1,12 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useMemo,
-  useContext,
-} from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { Item, Grid, Loader, Container, Checkbox } from 'semantic-ui-react';
+import { Grid, Loader, Container, Checkbox } from 'semantic-ui-react';
 
-import { Filters } from './Filters';
-import { SortBar } from './SortBar';
-import { HotelCard } from './HotelCard';
-import { StepsContext } from './App';
-import lazyWithPreload from '../utils/lazyWithPreload';
+import Filters from './Filters';
+import SortBar from './SortBar';
+import HotelsList from './HotelsList';
+import { useBookingFlow } from './BookingContext';
+import lazyWithPreload from '../../utils/lazyWithPreload';
 
 const sortHotels = {
   price: (a, b) => a.price.amount - b.price.amount,
@@ -20,20 +14,6 @@ const sortHotels = {
   reviews: (a, b) => b.rating.reviews - a.rating.reviews,
 };
 
-export const bedsType = [
-  {
-    text: 'Single',
-    value: 'single',
-  },
-  {
-    text: 'Double',
-    value: 'double',
-  },
-  {
-    text: 'Twin',
-    value: 'twin',
-  },
-];
 const countHotelsByBedType = data =>
   data.reduce(function(acc, v) {
     acc[v.room] = acc[v.room] ? acc[v.room] + 1 : 1;
@@ -51,13 +31,13 @@ const applyFilter = (filters, data) => {
 
 const RatingChart = lazyWithPreload(() => import('./RatingChart'));
 
-const HotelsList = props => {
+const SelectHotel = props => {
   const [sortField, setField] = useState('price');
   const [bedsTypeFilter, setBedType] = useState({});
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isChartVisible, setChartVisible] = useState(false);
-  const { actions } = useContext(StepsContext);
+  const { selectHotel } = useBookingFlow();
   useEffect(() => {
     const fetchData = async () => {
       RatingChart.preload();
@@ -105,15 +85,7 @@ const HotelsList = props => {
               <RatingChart data={chartData} />
             </React.Suspense>
           )}
-          <Item.Group divided>
-            {filteredHotels.map(hotel => (
-              <HotelCard
-                key={hotel.id}
-                hotel={hotel}
-                selectHotel={actions.selectHotel}
-              />
-            ))}
-          </Item.Group>
+          <HotelsList hotels={filteredHotels} selectHotel={selectHotel} />
         </Layout.Feed>
       </Layout>
     </Container>
@@ -138,4 +110,19 @@ const Feed = ({ isLoading, children }) => (
 Layout.Sidebar = Sidebar;
 Layout.Feed = Feed;
 
-export default HotelsList;
+export const bedsType = [
+  {
+    text: 'Single',
+    value: 'single',
+  },
+  {
+    text: 'Double',
+    value: 'double',
+  },
+  {
+    text: 'Twin',
+    value: 'twin',
+  },
+];
+
+export default SelectHotel;

@@ -1,18 +1,18 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Table, Divider, Container, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import {
-  getReservationError,
-  isReservationInProgress,
-  isReservationComplete,
-  isReservationFailure,
-  isReservationSuccess,
-} from '../reservation/reservation.selector';
+  getBookingError,
+  isBookingInProgress,
+  isBookingComplete,
+  isBookingFailure,
+  isBookingSuccess,
+} from '../selectors';
 
-import { HotelCard } from './HotelSummary';
-import { StepsContext } from './App';
+import HotelsList from './HotelsList';
+import { useBookingFlow } from './BookingContext';
 
-const ReservationSummary = ({
+const ConfirmBooking = ({
   complete,
   loading,
   close,
@@ -23,8 +23,9 @@ const ReservationSummary = ({
 }) => {
   const {
     state: { hotel, paymentMethod },
-    actions: { reset },
-  } = useContext(StepsContext);
+    reset,
+  } = useBookingFlow();
+
   useEffect(() => {
     return function cleanup() {
       close();
@@ -32,7 +33,7 @@ const ReservationSummary = ({
   }, [close]);
   return (
     <Container text>
-      <HotelCard hotel={hotel} />
+      <HotelsList hotels={[hotel]} />
       <Table basic="very">
         <Table.Body>
           <Table.Row>
@@ -95,11 +96,11 @@ const ReservationSummary = ({
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    error: getReservationError(state),
-    loading: isReservationInProgress(state),
-    isComplete: isReservationComplete(state),
-    isSuccess: isReservationSuccess(state),
-    isFailure: isReservationFailure(state),
+    error: getBookingError(state),
+    loading: isBookingInProgress(state),
+    isComplete: isBookingComplete(state),
+    isSuccess: isBookingSuccess(state),
+    isFailure: isBookingFailure(state),
   };
 };
 
@@ -113,4 +114,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ReservationSummary);
+)(ConfirmBooking);

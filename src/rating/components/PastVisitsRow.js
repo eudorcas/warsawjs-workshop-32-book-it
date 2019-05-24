@@ -1,8 +1,8 @@
 import React from 'react';
 import { Table, Rating, Header, Image } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { rateHotel } from '../rating/rating.reducer';
-import { getHotelToRating } from '../rating/rating.selector';
+import { rateHotel } from '../reducers';
+import { getHotelToRating } from '../selectors';
 
 const HotelRating = ({ hotel, rate }) => (
   <Table.Row>

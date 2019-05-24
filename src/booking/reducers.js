@@ -4,21 +4,21 @@ const initState = {
   inProgress: false,
 };
 
-function reservation(state = initState, action) {
+function booking(state = initState, action) {
   switch (action.type) {
-    case 'RESERVE_HOTEL':
+    case 'BOOK_HOTEL':
       return {
         ...state,
         inProgress: true,
       };
-    case 'RESERVATION_SUCCESS':
+    case 'BOOK_SUCCESS':
       return {
         ...state,
         error: null,
         inProgress: false,
         isComplete: true,
       };
-    case 'RESERVATION_ERROR':
+    case 'BOOK_ERROR':
       return {
         ...state,
         inProgress: false,
@@ -37,4 +37,4 @@ export function loginError(error) {
   return { type: 'LOGIN_ERROR', payload: { error } };
 }
 
-export default reservation;
+export default booking;

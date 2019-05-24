@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Button,
   Divider,
@@ -6,33 +6,17 @@ import {
   Dropdown,
   Container,
 } from 'semantic-ui-react';
-import { HotelCard } from './HotelSummary';
-import { StepsContext } from './App';
-import usePersistsValue from '../utils/usePersistsValue';
+import HotelsList from './HotelsList';
+import { useBookingFlow } from './BookingContext';
 
-export const paymentsOptions = [
-  {
-    key: 'blik',
-    text: 'BLIK',
-    value: 'blik',
-  },
-  {
-    key: 'paypal',
-    text: 'PayPal',
-    value: 'paypal',
-  },
-  {
-    key: 'card',
-    text: 'Karta Kredytowa',
-    value: 'card',
-  },
-];
+import usePersistsValue from '../../utils/usePersistsValue';
 
-export const SelectPaymentMethod = () => {
+const SelectPaymentMethod = () => {
   const {
     state: { hotel },
-    actions: { reset, selectPaymentMethod },
-  } = useContext(StepsContext);
+    reset,
+    selectPaymentMethod,
+  } = useBookingFlow();
   const [preferred, setPreferred] = usePersistsValue('preferredMethod', null);
   const [value, setValue] = useState(preferred);
   const mounted = useRef();
@@ -46,7 +30,7 @@ export const SelectPaymentMethod = () => {
 
   return (
     <Container text>
-      <HotelCard hotel={hotel} />
+      <HotelsList hotels={[hotel]} />
       <Header as="h3">Wybierz formę płatności:</Header>
       <Dropdown
         placeholder="forma płatności..."
@@ -69,3 +53,22 @@ export const SelectPaymentMethod = () => {
     </Container>
   );
 };
+
+export const paymentsOptions = [
+  {
+    key: 'blik',
+    text: 'BLIK',
+    value: 'blik',
+  },
+  {
+    key: 'paypal',
+    text: 'PayPal',
+    value: 'paypal',
+  },
+  {
+    key: 'card',
+    text: 'Karta Kredytowa',
+    value: 'card',
+  },
+];
+export default SelectPaymentMethod;

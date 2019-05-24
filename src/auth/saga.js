@@ -7,8 +7,8 @@ import {
   cancel,
   select,
 } from 'redux-saga/effects';
-import { loginSuccess, loginError, openAuthModal } from './auth.reducer';
-import { isAuthenticated } from './auth.selector';
+import { loginSuccess, loginError, openAuthModal } from './reducers';
+import { isAuthenticated } from './selectors';
 import * as api from '../api';
 
 function* loginApiCall(action) {
