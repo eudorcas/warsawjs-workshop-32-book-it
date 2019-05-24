@@ -7,6 +7,7 @@ import SortBar from './SortBar';
 import HotelsList from './HotelsList';
 import { useBookingFlow } from './BookingContext';
 import lazyWithPreload from '../../utils/lazyWithPreload';
+import { ONLINE_URL, BEDS_TYPE } from '../../utils/const';
 
 const sortHotels = {
   price: (a, b) => a.price.amount - b.price.amount,
@@ -21,12 +22,12 @@ const countHotelsByBedType = data =>
   }, {});
 
 const applyFilter = (filters, data) => {
-  const isFilterSet = bedsType.find(b => filters[b.value]);
+  const isFilterSet = BEDS_TYPE.find(b => filters[b.value]);
   if (!isFilterSet) {
     return data;
   }
-  const filteredHotels = data.filter(h => filters[h.room.toLowerCase()]);
-  return filteredHotels;
+  const filtered = data.filter(h => filters[h.room]);
+  return filtered;
 };
 
 const RatingChart = lazyWithPreload(() => import('./RatingChart'));
@@ -38,13 +39,14 @@ const SelectHotel = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [isChartVisible, setChartVisible] = useState(false);
   const { selectHotel } = useBookingFlow();
+
   useEffect(() => {
     const fetchData = async () => {
       RatingChart.preload();
       setIsLoading(true);
-      const result = await axios(process.env.PUBLIC_URL + '/data.json');
+      const result = await axios(ONLINE_URL);
       setIsLoading(false);
-      setData(result.data.list);
+      setData(result.data.list.slice(0, 20));
     };
     fetchData();
   }, []);
@@ -58,14 +60,25 @@ const SelectHotel = props => {
     [bedsTypeFilter]
   );
   const hotelsInFilter = useMemo(() => countHotelsByBedType(data), [data]);
-  const sortedHotels = data.sort(sortHotels[sortField]);
-  const filteredHotels = applyFilter(bedsTypeFilter, sortedHotels);
-  const chartData = filteredHotels.map(h => ({
-    rating: h.rating.average,
-    price: h.price.amount,
-    reviews: h.rating.reviews,
-    name: h.title,
-  }));
+  const filteredHotels = useMemo(() => applyFilter(bedsTypeFilter, data), [
+    bedsTypeFilter,
+    data,
+  ]);
+  const sortedHotels = useMemo(
+    () => filteredHotels.sort(sortHotels[sortField]).concat([]),
+    [filteredHotels, sortField]
+  );
+
+  const chartData = useMemo(
+    () =>
+      filteredHotels.map(h => ({
+        rating: h.rating.average,
+        price: h.price.amount,
+        reviews: h.rating.reviews,
+        name: h.title,
+      })),
+    [filteredHotels]
+  );
   return (
     <Container>
       <SortBar sortField={sortField} setField={setField} />
@@ -85,7 +98,11 @@ const SelectHotel = props => {
               <RatingChart data={chartData} />
             </React.Suspense>
           )}
-          <HotelsList hotels={filteredHotels} selectHotel={selectHotel} />
+          {isLoading ? (
+            <Loader active inline="centered" />
+          ) : (
+            <HotelsList hotels={sortedHotels} selectHotel={selectHotel} />
+          )}
         </Layout.Feed>
       </Layout>
     </Container>
@@ -101,28 +118,9 @@ const Sidebar = ({ children }) => (
   <Grid.Column width={4}>{children}</Grid.Column>
 );
 
-const Feed = ({ isLoading, children }) => (
-  <Grid.Column width={12}>
-    {isLoading ? <Loader active inline="centered" /> : children}
-  </Grid.Column>
-);
+const Feed = ({ children }) => <Grid.Column width={12}>{children}</Grid.Column>;
 
 Layout.Sidebar = Sidebar;
 Layout.Feed = Feed;
-
-export const bedsType = [
-  {
-    text: 'Single',
-    value: 'single',
-  },
-  {
-    text: 'Double',
-    value: 'double',
-  },
-  {
-    text: 'Twin',
-    value: 'twin',
-  },
-];
 
 export default SelectHotel;

@@ -21,11 +21,8 @@ const ConfirmBooking = ({
   isFailure,
   error,
 }) => {
-  const {
-    state: { hotel, paymentMethod },
-    reset,
-  } = useBookingFlow();
-
+  const { state, reset } = useBookingFlow();
+  const { hotel, paymentMethod } = state;
   useEffect(() => {
     return function cleanup() {
       close();
@@ -45,13 +42,13 @@ const ConfirmBooking = ({
           <Table.Row>
             <Table.Cell>Cena z pokój</Table.Cell>
             <Table.Cell collapsing textAlign="right">
-              {hotel.price.amount} {hotel.price.currency}
+              {hotel.price.amount} zł
             </Table.Cell>
           </Table.Row>
           <Table.Row>
             <Table.Cell>Podatek VAT 8%</Table.Cell>
             <Table.Cell collapsing textAlign="right">
-              + {+hotel.price.amount * 0.08} zł
+              + {(+hotel.price.amount * 0.08).toFixed(2)} zł
             </Table.Cell>
           </Table.Row>
 
@@ -61,7 +58,8 @@ const ConfirmBooking = ({
             </Table.Cell>
             <Table.Cell collapsing textAlign="right">
               <strong>
-                + {+hotel.price.amount + +hotel.price.amount * 0.08} zł
+                {(+hotel.price.amount + +hotel.price.amount * 0.08).toFixed(2)}{' '}
+                zł
               </strong>
             </Table.Cell>
           </Table.Row>
@@ -82,7 +80,12 @@ const ConfirmBooking = ({
         />
       )}
       {!isComplete && (
-        <Button loading={loading} onClick={complete} primary floated="right">
+        <Button
+          loading={loading}
+          onClick={() => complete({ id: hotel.id, paymentMethod })}
+          primary
+          floated="right"
+        >
           Zarezerwuj
         </Button>
       )}
@@ -106,7 +109,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    complete: () => dispatch({ type: 'COMPLETE_RESERVATION' }),
+    complete: booking =>
+      dispatch({ type: 'COMPLETE_RESERVATION', payload: booking }),
     close: () => dispatch({ type: 'CLOSE_SUMMARY' }),
   };
 };

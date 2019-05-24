@@ -19,10 +19,10 @@ function* reserveHotel(action) {
   }
 }
 
-function* bookingFlow() {
+function* bookingFlow(action) {
   const hasAuth = yield call(authFlow);
   if (hasAuth) {
-    yield put({ type: 'BOOK_HOTEL' });
+    yield put({ type: 'BOOK_HOTEL', payload: action.payload });
   }
 }
 

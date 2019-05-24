@@ -8,7 +8,11 @@ const HotelRating = ({ hotel, rate }) => (
   <Table.Row>
     <Table.Cell>
       <Header as="h4" image>
-        <Image src={hotel.cover.url} rounded size="mini" />
+        <Image
+          src={`https://picsum.photos/175?random=${hotel.id}`}
+          rounded
+          size="mini"
+        />
         <Header.Content>
           {hotel.title}
           <Header.Subheader>{hotel.location.address}</Header.Subheader>

@@ -14,7 +14,7 @@ const SortBar = ({ setField, sortField }) => (
     </Menu.Menu>
   </Menu>
 );
-export default SortBar;
+export default React.memo(SortBar);
 
 const sortFields = [
   {

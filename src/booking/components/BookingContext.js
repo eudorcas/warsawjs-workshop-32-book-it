@@ -1,4 +1,4 @@
-import React, { useReducer, createContext } from 'react';
+import React, { useReducer, createContext, useCallback } from 'react';
 import { Segment } from 'semantic-ui-react';
 import BookingCompletionStatus from './BookingCompletionStatus';
 
@@ -28,20 +28,29 @@ export function useBookingFlow() {
   const context = React.useContext(BookingContext);
 
   if (!context) {
-    throw new Error('useBookingFlow must be used within a BookingFlow');
+    throw new Error('useBookingFlow must be used within a BookingFlowProvider');
   }
 
   const { state, dispatch } = context;
 
-  const selectHotel = hotel => dispatch({ type: 'hotel', payload: { hotel } });
-  const selectPaymentMethod = method =>
-    dispatch({ type: 'paymentMethod', payload: { method } });
-  const reset = () => dispatch({ type: 'reset', payload: initialState });
+  const selectHotel = useCallback(
+    hotel => dispatch({ type: 'hotel', payload: { hotel } }),
+    [dispatch]
+  );
+
+  const selectPaymentMethod = useCallback(
+    method => dispatch({ type: 'paymentMethod', payload: { method } }),
+    [dispatch]
+  );
+  const reset = useCallback(
+    () => dispatch({ type: 'reset', payload: initialState }),
+    [dispatch]
+  );
 
   return { state, selectHotel, selectPaymentMethod, reset };
 }
 
-export function BookingFlow({ children }) {
+export function BookingFlowProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState, init);
 
   const context = { state, dispatch };

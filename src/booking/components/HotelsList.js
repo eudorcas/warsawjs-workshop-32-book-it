@@ -10,4 +10,4 @@ const HotelsList = ({ hotels, selectHotel }) => (
   </Item.Group>
 );
 
-export default HotelsList;
+export default React.memo(HotelsList);

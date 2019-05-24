@@ -16,7 +16,7 @@
         "reviews": 1260
       },
       "demand": "HIGH",
-      "room": "Double",
+      "room": "DOUBLE",
       "price": {
         "amount": 1669,
         "currency": "zł",
@@ -39,7 +39,7 @@
         "reviews": 6840
       },
       "demand": "MEDIUM",
-      "room": "Twin",
+      "room": "FAMILY",
       "price": {
         "amount": 1007,
         "currency": "zł",
@@ -62,7 +62,7 @@
         "reviews": 4236
       },
       "demand": "LOW",
-      "room": "Single",
+      "room": "SINGLE",
       "price": {
         "amount": 185,
         "currency": "zł",
@@ -86,7 +86,7 @@
         "reviews": 23
       },
       "demand": "LOW",
-      "room": "Double",
+      "room": "DOUBLE",
       "price": {
         "amount": 719,
         "currency": "zł",

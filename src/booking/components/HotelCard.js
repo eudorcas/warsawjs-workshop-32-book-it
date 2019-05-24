@@ -16,7 +16,7 @@ const HotelCard = props => {
   }, []);
   return (
     <Item>
-      <Item.Image src={hotel.cover.url} />
+      <Item.Image src={`https://picsum.photos/175?random=${hotel.id}`} />
       <Item.Content>
         <Item.Header as="a">{hotel.title}</Item.Header>
         <Item.Meta>
@@ -34,7 +34,7 @@ const HotelCard = props => {
             }}
           >
             <Label tag size={'huge'}>
-              {hotel.price.amount} {hotel.price.currency}
+              {hotel.price.amount} zł
             </Label>
           </div>
           Ocena gości:{' '}
