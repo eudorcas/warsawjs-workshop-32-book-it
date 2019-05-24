@@ -9,24 +9,12 @@ import {
 } from 'redux-saga/effects';
 import { loginSuccess, loginError, openAuthModal } from './auth.reducer';
 import { isAuthenticated } from './auth.selector';
-
-export const delay = ms =>
-  new Promise(resolve => setTimeout(() => resolve(true), ms));
-
-function isPasswordCorrect(password) {
-  return new Promise((resolve, reject) => {
-    if (password === 'admin') {
-      resolve(true);
-    }
-    reject('Prawidłowe hasło to `admin`');
-  });
-}
+import * as api from '../api';
 
 function* loginApiCall(action) {
   try {
     const { nick, password } = action.payload;
-    yield delay(1500);
-    yield call(isPasswordCorrect, password);
+    yield call(api.loginUser, password);
     yield put(loginSuccess(nick));
   } catch (e) {
     yield put(loginError(e));
