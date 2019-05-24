@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import auth from '../auth/auth.reducer';
 import reservation from '../reservation/reservation.reducer';
+import ratings from '../rating/rating.reducer';
 
 function root(state = null, action) {
   switch (action.type) {
@@ -9,4 +10,4 @@ function root(state = null, action) {
   }
 }
 
-export default combineReducers({ root, auth, reservation });
+export default combineReducers({ root, auth, reservation, ratings });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Segment,
   Container,
@@ -7,21 +7,15 @@ import {
   Header,
   Image,
 } from 'semantic-ui-react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 
-const RatingPastVisits = () => {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+import { getHotelForRating, rateHotel } from '../rating/rating.reducer';
+import { getRatings, isLoading } from '../rating/rating.selector';
 
+const RatingPastVisits = ({ fetchHotels, data, isLoading, rate }) => {
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const result = await axios(process.env.PUBLIC_URL + '/data.json');
-      setIsLoading(false);
-      setData(result.data.list);
-    };
-    fetchData();
-  }, []);
+    fetchHotels();
+  }, [fetchHotels]);
 
   return (
     <Container text>
@@ -54,8 +48,9 @@ const RatingPastVisits = () => {
                 </Table.Cell>
                 <Table.Cell collapsing>
                   <Rating
+                    disabled={!!hotel.rating.user}
                     maxRating={10}
-                    onRate={(...arg) => console.log({ arg })}
+                    onRate={(e, { rating }) => rate(hotel.id, rating)}
                     defaultRating={0}
                     icon="star"
                     size="small"
@@ -70,4 +65,21 @@ const RatingPastVisits = () => {
   );
 };
 
-export default RatingPastVisits;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    data: getRatings(state),
+    isLoading: isLoading(state),
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    fetchHotels: () => dispatch(getHotelForRating()),
+    rate: (id, rating) => dispatch(rateHotel(id, rating)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RatingPastVisits);
