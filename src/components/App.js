@@ -6,6 +6,7 @@ import MenuBar from './MenuBar';
 import ReservationSteps from './ReservationSteps';
 import { SelectPaymentMethod } from './SelectPaymentMethod';
 import { ReservationSummary } from './ReservationSummary';
+import LoginModal from '../auth/LoginModal';
 
 export const StepsContext = createContext(null);
 
@@ -55,6 +56,7 @@ export function StepsProvider({ children }) {
 const App = () => {
   return (
     <>
+      <LoginModal />
       <MenuBar />
       <StepsProvider>
         <HotelsList />

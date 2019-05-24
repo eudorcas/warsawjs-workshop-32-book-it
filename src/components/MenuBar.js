@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { isAuthenticated, getUserNick } from '../auth/auth.selector';
+import { startManualLogin, logoutUser } from '../auth/auth.reducer';
+
 import {
   Button,
   Container,
@@ -8,14 +12,14 @@ import {
   Visibility,
 } from 'semantic-ui-react';
 
-export default class MenuBar extends Component {
+class MenuBar extends Component {
   state = {};
 
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
 
   render() {
-    const { children } = this.props;
+    const { children, isAuthenticated, login, nick, logout } = this.props;
     const { fixed } = this.state;
 
     return (
@@ -43,17 +47,24 @@ export default class MenuBar extends Component {
                   BOOKit
                 </Menu.Item>
                 <Menu.Item position="right">
-                  <Button as="a" inverted={!fixed}>
-                    Log in
-                  </Button>
-                  <Button
-                    as="a"
-                    inverted={!fixed}
-                    primary={fixed}
-                    style={{ marginLeft: '0.5em' }}
-                  >
-                    Sign Up
-                  </Button>
+                  {!isAuthenticated ? (
+                    <Button onClick={login} as="a" inverted={!fixed}>
+                      Zaloguj
+                    </Button>
+                  ) : (
+                    <>
+                      Witaj, {nick}
+                      <Button
+                        as="a"
+                        onClick={logout}
+                        inverted={!fixed}
+                        primary={fixed}
+                        style={{ marginLeft: '0.5em' }}
+                      >
+                        Wyloguj
+                      </Button>
+                    </>
+                  )}
                 </Menu.Item>
               </Container>
             </Menu>
@@ -66,6 +77,25 @@ export default class MenuBar extends Component {
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    isAuthenticated: isAuthenticated(state),
+    nick: getUserNick(state),
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    login: () => dispatch(startManualLogin()),
+    logout: () => dispatch(logoutUser()),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MenuBar);
 
 const HomepageHeading = () => (
   <Container>
