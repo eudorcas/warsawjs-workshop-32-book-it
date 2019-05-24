@@ -7,16 +7,34 @@ import {
   Container,
 } from 'semantic-ui-react';
 import HotelsList from './HotelsList';
+import { useBookingFlow } from './BookingContext';
+
+import usePersistsValue from '../../utils/usePersistsValue';
 
 const SelectPaymentMethod = () => {
-  const value = '';
+  const {
+    state: { hotel },
+    reset,
+    selectPaymentMethod,
+  } = useBookingFlow();
+  const [preferred, setPreferred] = usePersistsValue('preferredMethod', null);
+  const [value, setValue] = useState(preferred);
+  const mounted = useRef();
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+    } else {
+      setPreferred(value);
+    }
+  }, [value, setPreferred]);
+
   return (
     <Container text>
-      <HotelsList hotels={[]} />
+      <HotelsList hotels={[hotel]} />
       <Header as="h3">Wybierz formę płatności:</Header>
       <Dropdown
         placeholder="forma płatności..."
-        onChange={(e, { value }) => noop(value)}
+        onChange={(e, { value }) => setValue(value)}
         fluid
         value={value}
         selection
@@ -25,18 +43,16 @@ const SelectPaymentMethod = () => {
       <Divider hidden />
       <Button
         disabled={!value}
-        onClick={() => noop(value)}
+        onClick={() => selectPaymentMethod(value)}
         primary
         floated="right"
       >
         Wybierz
       </Button>
-      <Button onClick={() => noop()}>Powrót do listy hoteli</Button>
+      <Button onClick={() => reset()}>Powrót do listy hoteli</Button>
     </Container>
   );
 };
-
-const noop = () => {};
 
 export const paymentsOptions = [
   {

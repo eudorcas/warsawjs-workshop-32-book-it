@@ -5,6 +5,17 @@ import VanillaTilt from 'vanilla-tilt';
 
 const HotelCard = props => {
   const { hotel, selectHotel } = props;
+
+  const tiltRef = React.useRef();
+  React.useEffect(() => {
+    VanillaTilt.init(tiltRef.current, {
+      max: 25,
+      speed: 400,
+      scale: 1.1,
+    });
+    const node = tiltRef.current;
+    return () => node.vanillaTilt.destroy();
+  }, []);
   return (
     <Item>
       <Item.Image src={`https://picsum.photos/175?random=${hotel.id}`} />
@@ -19,6 +30,7 @@ const HotelCard = props => {
           }}
         >
           <div
+            ref={tiltRef}
             style={{
               float: 'right',
             }}

@@ -1,68 +1,64 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# warsawjs-workshop-32-book-it
 
-## Available Scripts
+Repozytorium stworzone w celu przeprowadzenia warsztatów WarsawJS Workshop #32 - React.js dla zaawansowanych.
 
-In the project directory, you can run:
+Do każdego ćwiczenia został przygotowany kod szkieletowy. Oznacza to, że w większości nie będzie potrzeby pisania od zera komponentów ani wtórego kodu konfiguracyjnego. Ma to na celu maksymalne skupienie się na praktycznym zastosowaniu zaawansowanych rozwiązań i utrwalanie zdobytej wiedzy.
 
-### `npm start`
+**WAŻNE!** Ćwiczenia przygotowane są tak, aby w większości przypadków nie było wymagane zachowanie kolejności ich wykonywania. Podobnie jest z ich zawartością. Nie zawsze należy wykonać wszystkie polecenia aby przejść do kolejnego ćwiczenia.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Przygotowanie
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Przed przystąpieniem do warsztatów:
 
-### `npm test`
+- sklonuj repozytorium
+- zmień branch na `workshop`
+- zainstaluj zależności
+- uruchom aplikację i sprawdź czy wystartowała bez błędu
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Ćwiczenie A - Hooks: _useState_, _useEffect_
 
-### `npm run build`
+Za pomocą _useState_, _useEffect_ dokonaj zmian pliku `SelectHotel.js`, które pozwolą:
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- pobrać listę hoteli i wyświetlić je w przeglądarce
+- w trakcie pobierania wyświetlić komponent informujący o trwającym zapytaniu
+- filtrować listę hoteli na podstawie wybranego typu łóżka
+- sortować listę hoteli zgodnie z predefiniowanymi wartościami
+- ukrywać i chować wykres zgodnie z wybraną wartością przełącznika
+- wyświetlić liczbę hoteli dla każdego typu łóżka
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## Ćwiczenie B - Hooks: _useCallback_, _useMemo_, _memo_
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Za pomocą [React Developer Tools](https://github.com/facebook/react-devtools) zidentyfikuj komponenty, które rerenderują się w trakcie interakcji z listą hoteli. Następnie w pliku `SelectHotel.js` dokonaj zmian, które spowodują ponowne rerenderowanie się tylko tych komponentów, których dotyczyły zmiany. Wykorzystaj nowe api:
 
-### `npm run eject`
+- _useMemo_ do memoizacji czasochłonnych obliczeń
+- _useCallback_ do zapobiegania tworzeniu się nowych referencji do funkcji przy każdym rerenderze komponentu
+- _memo_ do tworzenia komponentów renderujących się ponownie tylko wtedy gdy przekazywane propsy zmieniły referencję
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Ćwiczenie C - Code Splitting, lazy loading, _Suspense_
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+W pliku `SelectHotel.js` wprowadź zmiany:
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- ustaw wykres jako domyślnie ukryty
+- z wykorzystaniem _React.lazy_, _import()_ i _Suspense_ opakuj komponent `RatingChart` aby jego kod pobierany był tylko w momencie wyświetlenia wykresu, a w trakcie zapytania pokazywany był komponent tymczasowy
+- zmień wywołanie _React.lazy_ aby pobieranie kodu komponentu `RatingChart` rozpoczęło się po pobraniu się głównego kodu źródłowego aplikacji
+- stwórz funkcję pozwalającą wymuszać pobieranie kodu komponentu w trakcie interakcji z aplikacją
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Ćwiczenie D - _useReducer_, _useContext_
 
-## Learn More
+W pliku `BookingFlow.js` wprowadź zmiany pozwalające zarządzać kolejnymi etapami rezerwacji hotelu. Na rezerwację składa się wybranie hotelu, wybranie sposobu płatności i potwierdzenie rezerwacji. Do kolejnego etapu można przejść tylko po prawidłowym wykonaniu poprzedniego. W pierwszym etapie wprowadzania zmian użyj _useReducer_ do:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- zarządzania stanem aktualnie wyświetlanego etapu, wybranego hotelu i sposobu płatności
+- przekazywania funkcji pozwalających na zmianę stanu rezerwacji i na przejście do kolejnego jej etapu
+- przerwania trwającej rezerwacji i powrót do stanu początkowego
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Następnie zmień sposób przekazywanie stanu zamówienia tak aby wykorzystywał on współdzielenie danych za pomocą _React Contex_.
 
-### Code Splitting
+## Kolejne ćwiczenia będą dodawana ...
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## Linki - Dokumentacja przydatna podczas szkolenia:
 
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- [Hooks API Reference](https://reactjs.org/docs/hooks-reference.html) - dokumentacja Hooks API
+- [Getting Started with Redux](https://redux.js.org/introduction/getting-started) - dokumentacja Redux'a
+- [Redux-Saga](https://redux-saga.js.org) - dokumentacja Redux Saga
+- [Create React App](https://facebook.github.io/create-react-app/docs/getting-started) - dokumentacja Create React App
+- [Semantic UI React](https://react.semantic-ui.com/) - dokumentacja Semantic UI React, gotowe komponenty wizualne

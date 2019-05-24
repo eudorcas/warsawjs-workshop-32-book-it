@@ -20,4 +20,4 @@ const Filters = ({ count, onChange }) => (
   </>
 );
 
-export default React.memo(Filters);
+export default Filters;

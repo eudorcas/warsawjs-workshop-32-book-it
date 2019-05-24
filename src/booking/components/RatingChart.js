@@ -39,7 +39,7 @@ const Example = ({ data }) => (
   </ResponsiveContainer>
 );
 
-export default React.memo(Example);
+export default Example;
 
 const CustomTooltip = props => {
   const { active, payload } = props;
