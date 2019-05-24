@@ -12,13 +12,13 @@
         "centre": "1.4 km"
       },
       "rating": {
-        "average": "7.6",
-        "reviews": "1260"
+        "average": 7.6,
+        "reviews": 1260
       },
       "demand": "HIGH",
       "room": "Double",
       "price": {
-        "amount": "1669",
+        "amount": 1669,
         "currency": "zł",
         "breakfast": true
       }
@@ -35,13 +35,13 @@
         "centre": "5 km"
       },
       "rating": {
-        "average": "7.6",
-        "reviews": "6840"
+        "average": 7.6,
+        "reviews": 6840
       },
       "demand": "MEDIUM",
       "room": "Twin",
       "price": {
-        "amount": "1007",
+        "amount": 1007,
         "currency": "zł",
         "breakfast": false
       }
@@ -58,13 +58,13 @@
         "centre": "6 km"
       },
       "rating": {
-        "average": "8.1",
-        "reviews": "4236"
+        "average": 8.1,
+        "reviews": 4236
       },
       "demand": "LOW",
       "room": "Single",
       "price": {
-        "amount": "185",
+        "amount": 185,
         "currency": "zł",
         "breakfast": true
       }
@@ -82,13 +82,13 @@
         "centre": "0.5 km"
       },
       "rating": {
-        "average": "9.6",
-        "reviews": "23"
+        "average": 9.6,
+        "reviews": 23
       },
       "demand": "LOW",
       "room": "Double",
       "price": {
-        "amount": "719",
+        "amount": 719,
         "currency": "zł",
         "breakfast": false
       }

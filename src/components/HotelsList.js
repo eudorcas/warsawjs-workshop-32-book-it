@@ -6,12 +6,13 @@ import React, {
   useContext,
 } from 'react';
 import axios from 'axios';
-import { Item, Grid, Loader, Container } from 'semantic-ui-react';
+import { Item, Grid, Loader, Container, Checkbox } from 'semantic-ui-react';
 
 import { Filters } from './Filters';
 import { SortBar } from './SortBar';
 import { HotelCard } from './HotelCard';
 import { StepsContext } from './App';
+import lazyWithPreload from '../utils/lazyWithPreload';
 
 const sortHotels = {
   price: (a, b) => a.price.amount - b.price.amount,
@@ -48,14 +49,18 @@ const applyFilter = (filters, data) => {
   return filteredHotels;
 };
 
-const HotelsList = () => {
+const RatingChart = lazyWithPreload(() => import('./RatingChart'));
+
+const HotelsList = props => {
   const [sortField, setField] = useState('price');
   const [bedsTypeFilter, setBedType] = useState({});
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isChartVisible, setChartVisible] = useState(false);
   const { actions } = useContext(StepsContext);
   useEffect(() => {
     const fetchData = async () => {
+      RatingChart.preload();
       setIsLoading(true);
       const result = await axios(process.env.PUBLIC_URL + '/data.json');
       setIsLoading(false);
@@ -75,22 +80,40 @@ const HotelsList = () => {
   const hotelsInFilter = useMemo(() => countHotelsByBedType(data), [data]);
   const sortedHotels = data.sort(sortHotels[sortField]);
   const filteredHotels = applyFilter(bedsTypeFilter, sortedHotels);
-
+  const chartData = filteredHotels.map(h => ({
+    rating: h.rating.average,
+    price: h.price.amount,
+    reviews: h.rating.reviews,
+    name: h.title,
+  }));
   return (
     <Container>
       <SortBar sortField={sortField} setField={setField} />
       <Layout>
         <Layout.Sidebar>
+          <Checkbox
+            checked={isChartVisible}
+            onChange={() => setChartVisible(!isChartVisible)}
+            toggle
+            label="Pokaż wykres"
+          />
           <Filters count={hotelsInFilter} onChange={setBedTypeFilter} />
         </Layout.Sidebar>
         <Layout.Feed isLoading={isLoading}>
-          {filteredHotels.map(hotel => (
-            <HotelCard
-              key={hotel.id}
-              hotel={hotel}
-              selectHotel={actions.selectHotel}
-            />
-          ))}
+          {isChartVisible && (
+            <React.Suspense fallback={<Loader active inline="centered" />}>
+              <RatingChart data={chartData} />
+            </React.Suspense>
+          )}
+          <Item.Group divided>
+            {filteredHotels.map(hotel => (
+              <HotelCard
+                key={hotel.id}
+                hotel={hotel}
+                selectHotel={actions.selectHotel}
+              />
+            ))}
+          </Item.Group>
         </Layout.Feed>
       </Layout>
     </Container>
@@ -108,9 +131,7 @@ const Sidebar = ({ children }) => (
 
 const Feed = ({ isLoading, children }) => (
   <Grid.Column width={12}>
-    <Item.Group divided>
-      {isLoading ? <Loader active inline="centered" /> : children}
-    </Item.Group>
+    {isLoading ? <Loader active inline="centered" /> : children}
   </Grid.Column>
 );
 
