@@ -44,9 +44,6 @@ export class HotelCard extends React.Component {
                 Rodzaj łóżka: <strong>{hotel.room}</strong>
               </div>
             </Item.Description>
-            <Item.Extra>
-              <Label icon="globe" content={hotel.demand} />
-            </Item.Extra>
           </Item.Content>
         </Item>
       </Item.Group>

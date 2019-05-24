@@ -1,6 +1,6 @@
 import React, { useReducer, createContext } from 'react';
 import { Segment } from 'semantic-ui-react';
-import { Router, Link } from '@reach/router';
+import { Router } from '@reach/router';
 
 import Footer from './Footer';
 import HotelsList from './HotelsList';
