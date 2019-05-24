@@ -32,6 +32,7 @@ function* loginApiCall(action) {
     yield put(loginError(e));
   }
 }
+
 function* login(action) {
   const task = yield fork(loginApiCall, action);
   const result = yield take([

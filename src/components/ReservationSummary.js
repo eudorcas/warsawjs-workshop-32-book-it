@@ -1,13 +1,35 @@
-import React, { useContext } from 'react';
-import { Button, Table, Divider, Container } from 'semantic-ui-react';
+import React, { useContext, useEffect } from 'react';
+import { Button, Table, Divider, Container, Message } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import {
+  getReservationError,
+  isReservationInProgress,
+  isReservationComplete,
+  isReservationFailure,
+  isReservationSuccess,
+} from '../reservation/reservation.selector';
+
 import { HotelCard } from './HotelSummary';
 import { StepsContext } from './App';
 
-export const ReservationSummary = () => {
+const ReservationSummary = ({
+  complete,
+  loading,
+  close,
+  isComplete,
+  isSuccess,
+  isFailure,
+  error,
+}) => {
   const {
     state: { hotel, paymentMethod },
     actions: { reset },
   } = useContext(StepsContext);
+  useEffect(() => {
+    return function cleanup() {
+      close();
+    };
+  }, [close]);
   return (
     <Container text>
       <HotelCard hotel={hotel} />
@@ -44,13 +66,51 @@ export const ReservationSummary = () => {
           </Table.Row>
         </Table.Body>
       </Table>
-      <Button primary floated="right">
-        Zarezerwuj
-      </Button>
+      {isSuccess && (
+        <Message
+          success
+          header="Rezerwacja zakończyła się sukcesem"
+          content="Zapraszamy do skorzystania z naszych usług w przyszłości"
+        />
+      )}
+      {isFailure && (
+        <Message
+          error
+          header="Rezerwacja zakończyła się niepowodzeniem"
+          content={error}
+        />
+      )}
+      {!isComplete && (
+        <Button loading={loading} onClick={complete} primary floated="right">
+          Zarezerwuj
+        </Button>
+      )}
       <Button onClick={() => reset()} floated="left">
-        Przerwij
+        Powrót do listy hoteli
       </Button>
       <Divider hidden fitted clearing />
     </Container>
   );
 };
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    error: getReservationError(state),
+    loading: isReservationInProgress(state),
+    isComplete: isReservationComplete(state),
+    isSuccess: isReservationSuccess(state),
+    isFailure: isReservationFailure(state),
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    complete: () => dispatch({ type: 'COMPLETE_RESERVATION' }),
+    close: () => dispatch({ type: 'CLOSE_SUMMARY' }),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ReservationSummary);

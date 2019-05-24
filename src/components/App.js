@@ -5,7 +5,7 @@ import HotelsList from './HotelsList';
 import MenuBar from './MenuBar';
 import ReservationSteps from './ReservationSteps';
 import { SelectPaymentMethod } from './SelectPaymentMethod';
-import { ReservationSummary } from './ReservationSummary';
+import ReservationSummary from './ReservationSummary';
 import LoginModal from '../auth/LoginModal';
 
 export const StepsContext = createContext(null);

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import auth from '../auth/auth.reducer';
+import reservation from '../reservation/reservation.reducer';
 
 function root(state = null, action) {
   switch (action.type) {
@@ -8,4 +9,4 @@ function root(state = null, action) {
   }
 }
 
-export default combineReducers({ root, auth });
+export default combineReducers({ root, auth, reservation });

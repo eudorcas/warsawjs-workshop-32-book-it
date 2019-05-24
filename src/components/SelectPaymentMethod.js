@@ -44,7 +44,7 @@ export const SelectPaymentMethod = () => {
         options={paymentsOptions}
       />
       <Divider hidden />
-      <Button onClick={() => reset()}>Przerwij</Button>
+      <Button onClick={() => reset()}>Powrót do listy hoteli</Button>
     </Container>
   );
 };
