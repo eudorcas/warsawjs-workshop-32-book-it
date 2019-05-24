@@ -55,13 +55,14 @@ export function StepsProvider({ children }) {
     </StepsContext.Provider>
   );
 }
-let Home = () => (
+const Home = () => (
   <StepsProvider>
     <HotelsList />
     <SelectPaymentMethod />
     <ReservationSummary />
   </StepsProvider>
 );
+const RatingScreen = () => <Rating />;
 const App = () => {
   return (
     <>
@@ -69,7 +70,7 @@ const App = () => {
       <MenuBar />
       <Router>
         <Home path="/" />
-        <Rating path="rating" />
+        <RatingScreen path="rating" />
       </Router>
       {/* <Footer /> */}
     </>

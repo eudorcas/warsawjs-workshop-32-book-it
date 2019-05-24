@@ -1,18 +1,12 @@
 import React, { useEffect } from 'react';
-import {
-  Segment,
-  Container,
-  Table,
-  Rating,
-  Header,
-  Image,
-} from 'semantic-ui-react';
+import { Segment, Container, Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-import { getHotelForRating, rateHotel } from '../rating/rating.reducer';
-import { getRatings, isLoading } from '../rating/rating.selector';
+import { getHotelForRating } from '../rating/rating.reducer';
+import { isLoading, getRatingsOrder } from '../rating/rating.selector';
+import HotelRating from './HotelRating';
 
-const RatingPastVisits = ({ fetchHotels, data, isLoading, rate }) => {
+const RatingPastVisits = ({ fetchHotels, order, isLoading }) => {
   useEffect(() => {
     fetchHotels();
   }, [fetchHotels]);
@@ -30,33 +24,8 @@ const RatingPastVisits = ({ fetchHotels, data, isLoading, rate }) => {
           </Table.Header>
 
           <Table.Body>
-            {data.map(hotel => (
-              <Table.Row key={hotel.id}>
-                <Table.Cell>
-                  <Header as="h4" image>
-                    <Image src={hotel.cover.url} rounded size="mini" />
-                    <Header.Content>
-                      {hotel.title}
-                      <Header.Subheader>
-                        {hotel.location.address}
-                      </Header.Subheader>
-                    </Header.Content>
-                  </Header>
-                </Table.Cell>
-                <Table.Cell collapsing>
-                  {hotel.rating.average} ({hotel.rating.reviews})
-                </Table.Cell>
-                <Table.Cell collapsing>
-                  <Rating
-                    disabled={!!hotel.rating.user}
-                    maxRating={10}
-                    onRate={(e, { rating }) => rate(hotel.id, rating)}
-                    defaultRating={0}
-                    icon="star"
-                    size="small"
-                  />
-                </Table.Cell>
-              </Table.Row>
+            {order.map(id => (
+              <HotelRating key={id} hotelId={id} />
             ))}
           </Table.Body>
         </Table>
@@ -67,7 +36,7 @@ const RatingPastVisits = ({ fetchHotels, data, isLoading, rate }) => {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    data: getRatings(state),
+    order: getRatingsOrder(state),
     isLoading: isLoading(state),
   };
 };
@@ -75,7 +44,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchHotels: () => dispatch(getHotelForRating()),
-    rate: (id, rating) => dispatch(rateHotel(id, rating)),
   };
 };
 
