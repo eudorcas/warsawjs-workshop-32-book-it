@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from 'semantic-ui-react';
 import logo from './logo.svg';
 import './App.css';
 
@@ -10,6 +11,7 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
+        <Icon loading name="react" />
         <a
           className="App-link"
           href="https://reactjs.org"
