@@ -1,5 +1,6 @@
 import { RSAA } from 'redux-api-middleware';
 import { normalize, schema } from 'normalizr';
+import produce from 'immer';
 
 const ratingEntity = new schema.Entity('ratings', {}, { idAttribute: 'id' });
 const ratingsSchema = new schema.Array(ratingEntity);
@@ -11,56 +12,30 @@ const initState = {
   inProgress: false,
 };
 
-function ratings(state = initState, action) {
-  switch (action.type) {
-    case 'RATING_REQUEST':
-      return {
-        ...state,
-        inProgress: true,
-      };
-    case 'RATING_SUCCESS': {
-      const { result, entities } = normalize(
-        action.payload.list,
-        ratingsSchema
-      );
-      return {
-        ...state,
-        order: result,
-        entities: entities.ratings,
-        error: null,
-        inProgress: false,
-      };
+const ratings = (state = initState, action) =>
+  produce(state, draft => {
+    switch (action.type) {
+      case 'RATING_REQUEST':
+        draft.inProgress = true;
+        return draft;
+      case 'RATING_SUCCESS':
+        const { result, entities } = normalize(
+          action.payload.list,
+          ratingsSchema
+        );
+        draft.order = result;
+        draft.entities = entities.ratings;
+        draft.error = null;
+        draft.inProgress = false;
+        return draft;
+      case 'RATE_HOTEL':
+        const rating = getNewRating(state, action);
+        draft.entities[action.payload.id].rating = rating;
+        return draft;
+      default:
+        return state;
     }
-    case 'RATING_ERROR':
-      return {
-        ...state,
-      };
-    case 'RATE_HOTEL': {
-      const entity = state.entities[action.payload.id];
-      const user = action.payload.rating;
-      const reviews = +entity.rating.reviews + 1;
-      const average =
-        (+entity.rating.reviews * +entity.rating.average + user) / reviews;
-
-      return {
-        ...state,
-        entities: {
-          ...state.entities,
-          [action.payload.id]: {
-            ...entity,
-            rating: {
-              average: average.toFixed(1),
-              reviews,
-              user,
-            },
-          },
-        },
-      };
-    }
-    default:
-      return state;
-  }
-}
+  });
 
 export const getHotelForRating = () => ({
   [RSAA]: {
@@ -76,3 +51,17 @@ export const rateHotel = (id, rating) => ({
 });
 
 export default ratings;
+
+function getNewRating(state, action) {
+  const hotel = state.entities[action.payload.id];
+  const user = action.payload.rating;
+  const reviews = hotel.rating.reviews + 1;
+  const average =
+    (hotel.rating.reviews * hotel.rating.average + user) / reviews;
+  const rating = {
+    average: average.toFixed(1),
+    reviews,
+    user,
+  };
+  return rating;
+}
