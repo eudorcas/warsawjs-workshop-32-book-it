@@ -1,5 +1,7 @@
 import React, { useReducer, createContext } from 'react';
 import { Segment } from 'semantic-ui-react';
+import { Router, Link } from '@reach/router';
+
 import Footer from './Footer';
 import HotelsList from './HotelsList';
 import MenuBar from './MenuBar';
@@ -7,6 +9,7 @@ import ReservationSteps from './ReservationSteps';
 import { SelectPaymentMethod } from './SelectPaymentMethod';
 import ReservationSummary from './ReservationSummary';
 import LoginModal from '../auth/LoginModal';
+import Rating from './Rating';
 
 export const StepsContext = createContext(null);
 
@@ -52,17 +55,22 @@ export function StepsProvider({ children }) {
     </StepsContext.Provider>
   );
 }
-
+let Home = () => (
+  <StepsProvider>
+    <HotelsList />
+    <SelectPaymentMethod />
+    <ReservationSummary />
+  </StepsProvider>
+);
 const App = () => {
   return (
     <>
       <LoginModal />
       <MenuBar />
-      <StepsProvider>
-        <HotelsList />
-        <SelectPaymentMethod />
-        <ReservationSummary />
-      </StepsProvider>
+      <Router>
+        <Home path="/" />
+        <Rating path="rating" />
+      </Router>
       {/* <Footer /> */}
     </>
   );

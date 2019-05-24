@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from '@reach/router';
 import { isAuthenticated, getUserNick } from '../auth/auth.selector';
 import { startManualLogin, logoutUser } from '../auth/auth.reducer';
 
@@ -43,7 +44,7 @@ class MenuBar extends Component {
               size="large"
             >
               <Container>
-                <Menu.Item as="a" active>
+                <Menu.Item to="/" as={Link} active>
                   BOOKit
                 </Menu.Item>
                 <Menu.Item position="right">
@@ -54,6 +55,14 @@ class MenuBar extends Component {
                   ) : (
                     <>
                       Witaj, {nick}
+                      <Button
+                        style={{ marginLeft: '0.5em' }}
+                        to="rating"
+                        as={Link}
+                        inverted={!fixed}
+                      >
+                        Oceń pobyt
+                      </Button>
                       <Button
                         as="a"
                         onClick={logout}
