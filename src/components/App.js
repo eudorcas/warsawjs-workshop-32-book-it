@@ -1,11 +1,13 @@
-import React, { useReducer } from 'react';
-import { Container, Segment } from 'semantic-ui-react';
+import React, { useReducer, createContext } from 'react';
+import { Segment } from 'semantic-ui-react';
 import Footer from './Footer';
 import HotelsList from './HotelsList';
 import MenuBar from './MenuBar';
 import ReservationSteps from './ReservationSteps';
 import { SelectPaymentMethod } from './SelectPaymentMethod';
 import { ReservationSummary } from './ReservationSummary';
+
+export const StepsContext = createContext(null);
 
 const initialState = { step: 1, hotel: null, paymentMethod: null };
 
@@ -27,50 +29,38 @@ function reducer(state, action) {
       throw new Error();
   }
 }
-const Pack = ({ children, text }) => (
-  <Segment vertical style={{ padding: '2em 0em' }}>
-    <Container text={text}>{children}</Container>
-  </Segment>
-);
-const App = () => {
+export function StepsProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState, init);
-  const selectHotelDispatch = hotel =>
-    dispatch({ type: 'hotel', payload: { hotel } });
-  const selectPaymentMethodDispatch = method =>
+  const selectHotel = hotel => dispatch({ type: 'hotel', payload: { hotel } });
+  const selectPaymentMethod = method =>
     dispatch({ type: 'paymentMethod', payload: { method } });
-  const resetReservationDispatch = () =>
-    dispatch({ type: 'reset', payload: initialState });
+  const reset = () => dispatch({ type: 'reset', payload: initialState });
+
+  const context = {
+    state,
+    actions: { selectHotel, selectPaymentMethod, reset },
+  };
+  return (
+    <StepsContext.Provider value={context}>
+      <Segment vertical style={{ padding: '2em 0em' }}>
+        <ReservationSteps step={state.step} />
+      </Segment>
+      <Segment vertical style={{ padding: '2em 0em' }}>
+        {children[state.step - 1]}
+      </Segment>
+    </StepsContext.Provider>
+  );
+}
+
+const App = () => {
   return (
     <>
       <MenuBar />
-      {state.step > 1 && (
-        <Pack>
-          <ReservationSteps step={state.step} />
-        </Pack>
-      )}
-      {state.step === 1 && (
-        <Pack>
-          <HotelsList selectHotel={selectHotelDispatch} />
-        </Pack>
-      )}
-      {state.step === 2 && (
-        <Pack text>
-          <SelectPaymentMethod
-            selectPaymentMethod={selectPaymentMethodDispatch}
-            reset={resetReservationDispatch}
-            hotel={state.hotel}
-          />
-        </Pack>
-      )}
-      {state.step === 3 && (
-        <Pack text>
-          <ReservationSummary
-            reset={resetReservationDispatch}
-            paymentMethod={state.paymentMethod}
-            hotel={state.hotel}
-          />
-        </Pack>
-      )}
+      <StepsProvider>
+        <HotelsList />
+        <SelectPaymentMethod />
+        <ReservationSummary />
+      </StepsProvider>
       {/* <Footer /> */}
     </>
   );

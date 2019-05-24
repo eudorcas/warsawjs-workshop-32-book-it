@@ -1,6 +1,13 @@
-import React from 'react';
-import { Button, Divider, Header, Dropdown } from 'semantic-ui-react';
+import React, { useContext } from 'react';
+import {
+  Button,
+  Divider,
+  Header,
+  Dropdown,
+  Container,
+} from 'semantic-ui-react';
 import { HotelCard } from './HotelSummary';
+import { StepsContext } from './App';
 
 export const paymentsOptions = [
   {
@@ -20,23 +27,24 @@ export const paymentsOptions = [
   },
 ];
 
-export class SelectPaymentMethod extends React.Component {
-  render() {
-    const { hotel, reset, selectPaymentMethod } = this.props;
-    return (
-      <>
-        <HotelCard hotel={hotel} />
-        <Header as="h3">Wybierz formę płatności:</Header>
-        <Dropdown
-          placeholder="forma płatności..."
-          onChange={(e, { value }) => selectPaymentMethod(value)}
-          fluid
-          selection
-          options={paymentsOptions}
-        />
-        <Divider hidden />
-        <Button onClick={() => reset()}>Przerwij</Button>
-      </>
-    );
-  }
-}
+export const SelectPaymentMethod = () => {
+  const {
+    state: { hotel },
+    actions: { reset, selectPaymentMethod },
+  } = useContext(StepsContext);
+  return (
+    <Container text>
+      <HotelCard hotel={hotel} />
+      <Header as="h3">Wybierz formę płatności:</Header>
+      <Dropdown
+        placeholder="forma płatności..."
+        onChange={(e, { value }) => selectPaymentMethod(value)}
+        fluid
+        selection
+        options={paymentsOptions}
+      />
+      <Divider hidden />
+      <Button onClick={() => reset()}>Przerwij</Button>
+    </Container>
+  );
+};

@@ -1,10 +1,17 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useContext,
+} from 'react';
 import axios from 'axios';
-import { Item, Grid, Loader } from 'semantic-ui-react';
+import { Item, Grid, Loader, Container } from 'semantic-ui-react';
 
 import { Filters } from './Filters';
 import { SortBar } from './SortBar';
 import { HotelCard } from './HotelCard';
+import { StepsContext } from './App';
 
 const sortHotels = {
   price: (a, b) => a.price.amount - b.price.amount,
@@ -41,12 +48,12 @@ const applyFilter = (filters, data) => {
   return filteredHotels;
 };
 
-const HotelsList = ({ selectHotel }) => {
+const HotelsList = () => {
   const [sortField, setField] = useState('price');
   const [bedsTypeFilter, setBedType] = useState({});
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { actions } = useContext(StepsContext);
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -70,7 +77,7 @@ const HotelsList = ({ selectHotel }) => {
   const filteredHotels = applyFilter(bedsTypeFilter, sortedHotels);
 
   return (
-    <>
+    <Container>
       <SortBar sortField={sortField} setField={setField} />
       <Layout>
         <Layout.Sidebar>
@@ -78,11 +85,15 @@ const HotelsList = ({ selectHotel }) => {
         </Layout.Sidebar>
         <Layout.Feed isLoading={isLoading}>
           {filteredHotels.map(hotel => (
-            <HotelCard key={hotel.id} hotel={hotel} selectHotel={selectHotel} />
+            <HotelCard
+              key={hotel.id}
+              hotel={hotel}
+              selectHotel={actions.selectHotel}
+            />
           ))}
         </Layout.Feed>
       </Layout>
-    </>
+    </Container>
   );
 };
 
