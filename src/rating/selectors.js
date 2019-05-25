@@ -1,13 +1,21 @@
 import { createSelector } from 'reselect';
 
-export const isLoading = state => state.ratings.inProgress;
+export const isLoading = state => state;
 
-export const getRatingsOrder = state => state.ratings.order;
-export const getRatingsEntities = state => state.ratings.entities;
-export const getHotelToRating = (state, id) => state.ratings.entities[id];
+export const getRatingsOrder = state => state;
+export const getRatingsEntities = state => state;
+export const getHotelToRating = state => state;
 
-export const getRatings = createSelector(
-  getRatingsOrder,
-  getRatingsEntities,
-  (order, entities) => order.map(id => entities[id])
-);
+export const getRatedHotels = state => state;
+
+export const getRatedHotelsNumber = state => state;
+
+export const getRatedHotelsAverage = state => state;
+
+function getAverageUserRating(ratedHotels) {
+  return ratedHotels
+    .reduce((total, hotel) => {
+      return total + hotel.rating.user / ratedHotels.length;
+    }, 0)
+    .toFixed(2);
+}
