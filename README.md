@@ -70,6 +70,7 @@ W plikach folderze `rating` dodaj kod który będzie umożliwiał:
 - pobranie i wyświetlenie listy hoteli z wykorzystaniem funkcji _redux-api-middleware_
 - ocenę hoteli i przechowywanie tych wartości w redux store pod kluczem `hotels[x].rating.user`
 - pobranie kolejnych hoteli po kliknięciu na przycisk `Załaduj więcej` bez tracenia stanu aktualnie wprowadzonych ocen
+- pobieranie informacji dotyczących hoteli ocenionych przez użytkownika
 
 Optymalizacja redux store:
 
@@ -87,6 +88,10 @@ Możesz urozmaicić sobie pracę poprzez wykonie innych funkcji za pomocą wskaz
 - _render prop_, który będzie udostępniać metody paginacji listy wyświetlanych hoteli.
 
 > **Podpowiedź**: Przykład wymienionych wzorców znajdują się w plikach `Hover.js`,`useHover.js` i `withHover.js` w katalogu `utils`.
+
+## Ćwiczenie F - React refs
+
+W pliku `HotelCard.js` wprowadź zmiany, które pozwolą animować etykietę z ceną hotelu przy najechaniu na nią myszką. Użyj do tego biblioteki _VanillaTilt_ oraz hooks _useRef_, _useEffect_.
 
 ## Linki - Dokumentacja przydatna podczas szkolenia:
 

@@ -25,7 +25,7 @@ const RatePastVisits = ({ fetchHotels, order, isLoading, count, average }) => {
             <Statistic.Value>
               <Icon name="building outline" /> {count}
             </Statistic.Value>
-            <Statistic.Label>cenionych hoteli</Statistic.Label>
+            <Statistic.Label>ocenionych hoteli</Statistic.Label>
           </Statistic>
           <Statistic horizontal>
             <Statistic.Value>

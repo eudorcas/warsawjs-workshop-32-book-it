@@ -52,9 +52,9 @@ function applyFilter(filters, data) {
 
 function prepareChartData(hotels) {
   return hotels.map(h => ({
-    rating: h.rating.average,
-    price: h.price.amount,
-    reviews: h.rating.reviews,
+    rating: +h.rating.average,
+    price: +h.price.amount,
+    reviews: +h.rating.reviews,
     name: h.title,
   }));
 }
