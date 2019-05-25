@@ -3,7 +3,7 @@ import { Router } from '@reach/router';
 
 import MenuBar from './MenuBar';
 import LoginModal from '../../auth/components/LoginModal';
-import RatePastVisits from '../../rating/components/RatePastVisits';
+import RatePastVisits from '../../rating/components/RatePastVisits.final';
 import BookingFlow from '../../booking/components/BookingFlow';
 
 const App = () => {

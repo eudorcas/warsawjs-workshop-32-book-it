@@ -53,7 +53,28 @@ W pliku `BookingFlow.js` wprowadź zmiany pozwalające zarządzać kolejnymi eta
 
 Następnie zmień sposób przekazywanie stanu zamówienia tak aby wykorzystywał on współdzielenie danych za pomocą _React Contex_.
 
-## Kolejne ćwiczenia będą dodawana ...
+## Ćwiczenie E - _redux_, _redux saga_
+
+- W pliku `ConfirmBooking.js` oprogramuj przycisk `Zarezerwuj` aby po jego wciśnięciu wywoływane była funkcja przekazująca zdarzenie do redux store.
+- W pliku `saga.js` napisz funkcję z wykorzystaniem biblioteki _redux-saga_ przechwytującą to zdarzenie i wywołującą zapytanie do api potwierdzającą rezerwację.
+- W pliku `reducers.js` przygotuj redux reducer aby przechowywał stan trwającego zapytania i podłącz ten stan do komponentu `ConfirmBooking`.
+- Wprowadź zmiany do napisanego kodu tak aby reagował na zamknięcie rezerwacji i przerywał trwające zapytanie do api.
+
+_Podpowiedź_ Warto zajrzeć do plików w folderze `auth` gdzie zastosowano podobne
+
+## Ćwiczenie F - _redux-api-middleware_, _immer_ oraz optymalizacja redux store
+
+W plikach folderze `rating` dodaj kod który będzie umożliwiał:
+
+- pobranie i wyświetlenie listy hoteli z wykorzystaniem funkcji _redux-api-middleware_
+- ocenę hoteli i przechowywanie tych wartości w redux store pod kluczem `hotels[x].rating.user`
+- pobranie kolejnych hoteli po kliknięciu na przycisk `Załaduj więcej` bez tracenia stanu aktualnie wprowadzonych ocen
+
+Za pomocą [React Developer Tools](https://github.com/facebook/react-devtools) zidentyfikuj komponenty, które rerenderują się w trakcie oceny i doładowanie się kolejnych hoteli. Wyeliminuj zbędne ponowne renderowanie się komponentów za pomocą zmiany struktury redux store przy użyciu biblioteki _normalizr_ i podłączeniu do store każdego hotelu z osobna.
+
+Za pomocą biblioteki _immer_ zmień kod `reducer.js` aby pozbyć się ręcznego budowania nowych obiektów w trakcie zmiany redux store.
+
+## Kolejne ćwiczenia będą dodawane ...
 
 ## Linki - Dokumentacja przydatna podczas szkolenia:
 

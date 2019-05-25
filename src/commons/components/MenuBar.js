@@ -48,9 +48,24 @@ class MenuBar extends Component {
               </Menu.Item>
               <Menu.Item position="right">
                 {!isAuthenticated ? (
-                  <Button onClick={login} as="a" inverted={!fixed}>
-                    Zaloguj
-                  </Button>
+                  <>
+                    <Button
+                      style={{ marginLeft: '0.5em' }}
+                      to="rate"
+                      as={Link}
+                      inverted={!fixed}
+                    >
+                      Oceń pobyt
+                    </Button>
+                    <Button
+                      style={{ marginLeft: '0.5em' }}
+                      onClick={login}
+                      as="a"
+                      inverted={!fixed}
+                    >
+                      Zaloguj
+                    </Button>
+                  </>
                 ) : (
                   <>
                     Witaj, {nick}
