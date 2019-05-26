@@ -6,33 +6,80 @@ import Filters from './Filters';
 import SortBar from './SortBar';
 import HotelsList from './HotelsList';
 import ChartSwitcher from './ChartSwitcher';
-import RatingChart from './RatingChart';
 
+import { useBookingFlow } from './BookingContext';
+import lazyWithPreload from '../../utils/lazyWithPreload';
 import { ONLINE_URL, BEDS_TYPE } from '../../utils/const';
 
+const RatingChart = lazyWithPreload(() => import('./RatingChart'));
+
 const SelectHotel = props => {
+  const [sortField, setField] = useState('price');
+  const [bedsTypeFilter, setBedType] = useState({});
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isChartVisible, setChartVisible] = useState(false);
+  const { selectHotel } = useBookingFlow();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      RatingChart.preload();
+      setIsLoading(true);
+      const result = await axios(ONLINE_URL);
+      setIsLoading(false);
+      setData(result.data.list.slice(0, 20));
+    };
+    fetchData();
+  }, []);
+
+  const setBedTypeFilter = useCallback(
+    (value, checked) =>
+      setBedType({
+        ...bedsTypeFilter,
+        [value]: checked,
+      }),
+    [bedsTypeFilter]
+  );
+  const hotelsInFilter = useMemo(() => countHotelsByBedType(data), [data]);
+  const filteredHotels = useMemo(() => applyFilter(bedsTypeFilter, data), [
+    bedsTypeFilter,
+    data,
+  ]);
+  const sortedHotels = useMemo(() => applySort(filteredHotels, sortField), [
+    filteredHotels,
+    sortField,
+  ]);
+
+  const chartData = useMemo(() => prepareChartData(filteredHotels), [
+    filteredHotels,
+  ]);
   return (
     <Container>
-      <SortBar sortField={'price'} setField={noop} />
+      <SortBar sortField={sortField} setField={setField} />
       <Layout>
         <Layout.Sidebar>
-          <ChartSwitcher isChartVisible={false} switchChartVisible={noop} />
-          <Filters count={{}} onChange={noop} />
+          <ChartSwitcher
+            isChartVisible={isChartVisible}
+            switchChartVisible={setChartVisible}
+          />
+          <Filters count={hotelsInFilter} onChange={setBedTypeFilter} />
         </Layout.Sidebar>
-        <Layout.Feed isLoading={true}>
-          {false && <RatingChart data={[]} />}
-          {false ? (
+        <Layout.Feed isLoading={isLoading}>
+          {isChartVisible && (
+            <React.Suspense fallback={<Loader active inline="centered" />}>
+              <RatingChart data={chartData} />
+            </React.Suspense>
+          )}
+          {isLoading ? (
             <Loader active inline="centered" />
           ) : (
-            <HotelsList hotels={[]} selectHotel={noop} />
+            <HotelsList hotels={sortedHotels} selectHotel={selectHotel} />
           )}
         </Layout.Feed>
       </Layout>
     </Container>
   );
 };
-
-const noop = () => {};
 
 function countHotelsByBedType(data) {
   return data.reduce(function(acc, v) {

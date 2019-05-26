@@ -6,6 +6,28 @@ const initState = {
 
 function booking(state = initState, action) {
   switch (action.type) {
+    case 'BOOK_HOTEL':
+      return {
+        ...state,
+        inProgress: true,
+      };
+    case 'BOOK_SUCCESS':
+      return {
+        ...state,
+        error: null,
+        inProgress: false,
+        isComplete: true,
+      };
+    case 'BOOK_ERROR':
+      return {
+        ...state,
+        inProgress: false,
+        error: action.payload.error,
+      };
+    case 'CLOSE_SUMMARY':
+      return {
+        ...initState,
+      };
     default:
       return state;
   }

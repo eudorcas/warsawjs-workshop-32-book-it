@@ -38,4 +38,19 @@ const HotelRating = ({ hotel, rate }) => (
   </Table.Row>
 );
 
-export default HotelRating;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    hotel: getHotelToRating(state, ownProps.hotelId),
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    rate: (id, rating) => dispatch(rateHotel(id, rating)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HotelRating);

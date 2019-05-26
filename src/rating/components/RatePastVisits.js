@@ -3,16 +3,20 @@ import { Segment, Container, Button, Statistic, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import { getHotelForRating } from '../reducers';
+import {
+  isLoading,
+  getRatingsOrder,
+  getRatedHotelsNumber,
+  getRatedHotelsAverage,
+} from '../selectors';
 import PastVisitsTable from './PastVisitsTable';
 import PastVisitsRow from './PastVisitsRow';
 
-const RatePastVisits = ({
-  fetchHotels,
-  data = [],
-  isLoading = false,
-  count = 0,
-  average = 0,
-}) => {
+const RatePastVisits = ({ fetchHotels, order, isLoading, count, average }) => {
+  useEffect(() => {
+    order.length === 0 && fetchHotels();
+  }, [fetchHotels, order]);
+
   return (
     <Container text>
       <Segment vertical style={{ padding: '2em 0em' }}>
@@ -31,8 +35,8 @@ const RatePastVisits = ({
           </Statistic>
         </Statistic.Group>
         <PastVisitsTable>
-          {data.map(hotel => (
-            <PastVisitsRow key={hotel.id} hotel={hotel} />
+          {order.map(id => (
+            <PastVisitsRow key={id} hotelId={id} />
           ))}
         </PastVisitsTable>
         <Button loading={isLoading} onClick={fetchHotels} fluid>
@@ -43,4 +47,22 @@ const RatePastVisits = ({
   );
 };
 
-export default RatePastVisits;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    count: getRatedHotelsNumber(state),
+    average: getRatedHotelsAverage(state),
+    order: getRatingsOrder(state),
+    isLoading: isLoading(state),
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    fetchHotels: () => dispatch(getHotelForRating()),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RatePastVisits);
