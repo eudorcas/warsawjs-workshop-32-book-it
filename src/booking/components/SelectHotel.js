@@ -46,6 +46,7 @@ const SelectHotel = props => {
   
   return (
     <Container>
+      <h1>Siema</h1>
       <SortBar sortField={sortType} setField={setSortType} />
       <Layout>
         <Layout.Sidebar>
