@@ -46,17 +46,17 @@ W pliku `SelectHotel.js` wprowadź zmiany:
 
 ## Ćwiczenie D - useReducer, useContext
 
-W pliku `BookingFlow.js` wprowadź zmiany pozwalające zarządzać kolejnymi etapami rezerwacji hotelu. Na rezerwację składa się wybranie hotelu, wybranie sposobu płatności i potwierdzenie rezerwacji. Do kolejnego etapu można przejść tylko po prawidłowym wykonaniu poprzedniego. W pierwszym etapie wprowadzania zmian użyj _useReducer_ do:
+W pliku `BookingFlow.js` wprowadź zmiany pozwalające zarządzać kolejnymi etapami rezerwacji hotelu. Na rezerwację składa się wybranie hotelu, sposobu płatności i potwierdzenie rezerwacji. Do kolejnego etapu można przejść tylko po prawidłowym wykonaniu poprzedniego. W pierwszym etapie wprowadzania zmian użyj _useReducer_ do:
 
 - zarządzania stanem aktualnie wyświetlanego etapu, wybranego hotelu i sposobu płatności
 - przekazywania funkcji pozwalających na zmianę stanu rezerwacji i na przejście do kolejnego jej etapu
 - przerwania trwającej rezerwacji i powrót do stanu początkowego
 
-Następnie zmień sposób przekazywanie stanu zamówienia tak aby wykorzystywał on współdzielenie danych za pomocą _React Contex_.
+Następnie zmień sposób przekazywania stanu zamówienia tak aby wykorzystywał on współdzielenie danych za pomocą _React Contex_.
 
 ## Ćwiczenie E - redux, redux saga
 
-- W pliku `ConfirmBooking.js` oprogramuj przycisk `Zarezerwuj` aby po jego wciśnięciu wywoływane była funkcja przekazująca zdarzenie do redux store.
+- W pliku `ConfirmBooking.js` oprogramuj przycisk `Zarezerwuj` aby po jego wciśnięciu wywoływana była funkcja przekazująca zdarzenie do redux store.
 - W pliku `saga.js` napisz funkcję z wykorzystaniem biblioteki _redux-saga_ przechwytującą to zdarzenie i wywołującą zapytanie do api potwierdzającą rezerwację. Dokonanie rezerwacji powinno być możliwe tylko dla zalogowanego użytkownika.
 - W pliku `reducers.js` przygotuj redux reducer aby przechowywał stan trwającego zapytania i podłącz ten stan do komponentu `ConfirmBooking`.
 - Wprowadź zmiany do napisanego kodu tak aby reagował na zamknięcie rezerwacji i przerywał trwające zapytanie do api.
@@ -65,11 +65,11 @@ Następnie zmień sposób przekazywanie stanu zamówienia tak aby wykorzystywał
 
 ## Ćwiczenie F - redux-api-middleware i optymalizacja redux store
 
-W plikach folderze `rating` dodaj kod który będzie umożliwiał:
+W plikach w folderze `rating` dodaj kod który będzie umożliwiał:
 
 - pobranie i wyświetlenie listy hoteli z wykorzystaniem funkcji _redux-api-middleware_
 - ocenę hoteli i przechowywanie tych wartości w redux store pod kluczem `hotels[x].rating.user`
-- pobranie kolejnych hoteli po kliknięciu na przycisk `Załaduj więcej` bez tracenia stanu aktualnie wprowadzonych ocen
+- pobranie kolejnych hoteli po kliknięciu przycisku `Załaduj więcej` bez tracenia stanu aktualnie wprowadzonych ocen
 - pobieranie informacji dotyczących hoteli ocenionych przez użytkownika
 
 Optymalizacja redux store:
@@ -80,7 +80,7 @@ Optymalizacja redux store:
 
 ## Ćwiczenie G - render prop, higher order component, custom hooks
 
-Napisz własny hook, który będzie pozwalał na zapis i odczyt wartość z _localStorage_. Wprowadź zmiany pliku `SelectPaymentMethod.js` tak aby ostatnio wybrana metoda płatności była zapamiętywana po zamknięciu okna przeglądarki. Wykonaj to ćwiczenie przy zastosowani _render prop_ i _higher order component_.
+Napisz własny hook, który będzie pozwalał na zapis i odczyt wartość z _localStorage_. Wprowadź zmiany pliku `SelectPaymentMethod.js` tak aby ostatnio wybrana metoda płatności była zapamiętywana po zamknięciu okna przeglądarki. Wykonaj to ćwiczenie przy zastosowaniu _render prop_ i _higher order component_.
 
 Możesz urozmaicić sobie pracę poprzez wykonie innych funkcji za pomocą wskazanych technik. Np.:
 
