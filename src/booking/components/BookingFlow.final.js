@@ -1,7 +1,7 @@
 import React from 'react';
-import SelectHotel from './SelectHotel.final';
-import SelectPaymentMethod from './SelectPaymentMethod.final';
-import ConfirmBooking from './ConfirmBooking.final';
+import SelectHotel from './SelectHotel';
+import SelectPaymentMethod from './SelectPaymentMethod';
+import ConfirmBooking from './ConfirmBooking';
 import { BookingFlowProvider } from './BookingContext';
 
 const BookingFlow = () => (

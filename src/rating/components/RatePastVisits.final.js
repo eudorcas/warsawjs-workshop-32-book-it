@@ -10,7 +10,7 @@ import {
   getRatedHotelsAverage,
 } from '../selectors';
 import PastVisitsTable from './PastVisitsTable';
-import PastVisitsRow from './PastVisitsRow.final';
+import PastVisitsRow from './PastVisitsRow';
 
 const RatePastVisits = ({ fetchHotels, order, isLoading, count, average }) => {
   useEffect(() => {
