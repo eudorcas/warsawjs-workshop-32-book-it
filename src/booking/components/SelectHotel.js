@@ -6,31 +6,69 @@ import Filters from './Filters';
 import SortBar from './SortBar';
 import HotelsList from './HotelsList';
 import ChartSwitcher from './ChartSwitcher';
-import RatingChart from './RatingChart';
 
 import { ONLINE_URL, BEDS_TYPE } from '../../utils/const';
 
+const RatingChart = React.lazy(() => import('./RatingChart'));
+
 const SelectHotel = props => {
+  const [hotels, setData] = useState([]);
+  const [isLoading, setLoading] = useState();
+  const [bedType, setBedType] = useState({});
+  const [sortType, setSortType] = useState('price');
+  const [showChart, setSwitcher] = useState(false);
+
+  const setFilter = useCallback(
+    (filterType, checked) => 
+    setBedType({
+      ...bedType,
+      [filterType]: checked
+    }), [bedType]);
+  
+  
+  const filteredHotels = useMemo(() => applyFilter(bedType, hotels), [bedType, hotels]);
+  const sortedHotels = useMemo(() => applySort(filteredHotels, sortType), [filteredHotels, sortType]);
+  const hotelsInFilter = useMemo(() => countHotelsByBedType(hotels), [hotels]);
+  const chartData = useMemo(() => prepareChartData(sortedHotels),
+    [sortedHotels]
+  );
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(ONLINE_URL)
+    .then(response =>response.json())
+    .then(data => {
+      setData(data.list);
+      setLoading(false);
+    });
+  },[]);
+
+  
   return (
     <Container>
-      <SortBar sortField={'price'} setField={noop} />
+      <SortBar sortField={sortType} setField={setSortType} />
       <Layout>
         <Layout.Sidebar>
-          <ChartSwitcher isChartVisible={false} switchChartVisible={noop} />
-          <Filters count={{}} onChange={noop} />
+          <ChartSwitcher isChartVisible={showChart} switchChartVisible={setSwitcher} />
+          <Filters count={hotelsInFilter} onChange={setFilter}></Filters>
         </Layout.Sidebar>
-        <Layout.Feed isLoading={true}>
-          {false && <RatingChart data={[]} />}
-          {false ? (
+        <Layout.Feed isLoading={isLoading}>
+          {showChart && (
+            <React.Suspense fallback={<Loader active inline="centered" />}>
+              <RatingChart data={chartData} />
+            </React.Suspense>
+          )}
+          {isLoading ? (
             <Loader active inline="centered" />
           ) : (
-            <HotelsList hotels={[]} selectHotel={noop} />
+            <HotelsList hotels={sortedHotels} />
           )}
         </Layout.Feed>
       </Layout>
     </Container>
   );
 };
+
 
 const noop = () => {};
 
@@ -42,6 +80,7 @@ function countHotelsByBedType(data) {
 }
 
 function applyFilter(filters, data) {
+  console.log(BEDS_TYPE);
   const isFilterSet = BEDS_TYPE.find(b => filters[b.value]);
   if (!isFilterSet) {
     return data;
@@ -52,9 +91,9 @@ function applyFilter(filters, data) {
 
 function prepareChartData(hotels) {
   return hotels.map(h => ({
-    rating: h.rating.average,
-    price: h.price.amount,
-    reviews: h.rating.reviews,
+    rating: +h.rating.average,
+    price: +h.price.amount,
+    reviews: +h.rating.reviews,
     name: h.title,
   }));
 }
